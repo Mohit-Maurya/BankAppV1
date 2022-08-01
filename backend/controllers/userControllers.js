@@ -14,7 +14,7 @@ export const getUser = (req, res) => {
             res.status(500);
             res.send(err);
         }
-        else if(result){
+        else if(result && result.status != "deleted"){
             res.send(result);
         } else {
             res.sendStatus(404);
@@ -30,7 +30,7 @@ export const verifyUser = (req, res) => {
             res.status(500);
             res.send(err);
         }
-        else if(result){
+        else if(result && result.status != "deleted"){
             if(result.password == req.body.password){
                return res.send("Authorized User");
             }
@@ -59,8 +59,7 @@ export const updateUser = (req, res) => {
         else {
             res.status(404);
             res.send("User with userId: " + userId + ". Not found.");
-        }
-        
+        }   
     });
 
     updateUser.save((err, result) => {
@@ -80,6 +79,27 @@ export const updateUser = (req, res) => {
     }); 
 };
 
+// DELETE (actually using PATCH)
+export const deleteUser = (req, res) => {
+
+    console.log(req.params.userId);
+    User.updateOne(
+        {userId: req.params.userId},
+        {"status": "deleted"},
+        (err, result) => {
+            if (err){
+                //server error
+                res.status(401);
+                res.send(err);
+            }
+            else {
+                console.log("Updated status to deleted for userId: ", req.params.userId);
+                res.sendStatus(200);
+            }
+        }
+    );
+}
+
 
 
 // "/users"
@@ -92,7 +112,7 @@ export const getUsers = (req, res) => {
             res.status(500);
             res.send(err);
         }
-        else if(result){
+        else if(result && result.status != "deleted"){
             res.send(result);
         }
         else {

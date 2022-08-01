@@ -2,6 +2,7 @@ import {
     getUser,
     verifyUser,
     updateUser,
+    deleteUser,
     getUsers,
     addNewUser
 } from "../controllers/userControllers";
@@ -16,7 +17,7 @@ const routes = (app) => {
     .get(getUser)
     .post(verifyUser)
     .put(updateUser)
-    // .delete(deleteUser)
+    .delete(deleteUser)
 
     // app.route("/admin/:employeeId")
     // .get(getAdmin)
