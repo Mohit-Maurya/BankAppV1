@@ -26,7 +26,7 @@ export const verifyUser = (req, res) => {
         }
         else if(result){
             if(result.password == req.body.password){
-                res.send("Authorized User");
+               return res.send("Authorized User");
             }
         }
         res.status(404);
