@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState } from 'react';
 import axios from 'axios';
-import {useNavigate} from 'react-router-dom';
+import {useNavigate,Link} from 'react-router-dom';
 
 function Login() {
     const [login, setLogin] = useState({ userid: "", password: "" ,error:''})
@@ -36,7 +36,8 @@ function Login() {
                     <input type='text' id='userid' className='form-control rounded-0' style={{ width: '75%' }} onChange={(e) => setLogin((prevState) => ({ ...prevState, userid: e.target.value }))} /><br />
                     <label >Password</label>
                     <input type='password' id='userpassword' className='form-control rounded-0' style={{ width: '75%' }} onChange={(e) => setLogin(prevState => { return { ...prevState, password: e.target.value } })} /><br />
-                    <p><span style={{color:'red'}}>{login.error}</span></p>
+                    <p><span style={{color:'red'}}>{login.error}</span></p><br/>
+                    <Link to="/registration" className='float-start mt-2'>New User ?</Link>
                     <button className="btn btn-primary float-end" onClick={submitUserLogin}>Login</button>
                 </div>
             </div>
