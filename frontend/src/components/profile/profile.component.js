@@ -10,7 +10,7 @@ function Profile() {
     })
 
     const [update, setUpdate] = useState(false)
-
+  
     const getUser = async () => {
         await axios.get("http://localhost:8080/user/" + (1122).toString())
             .then((res) => {
@@ -26,9 +26,18 @@ function Profile() {
             })
     }
 
-    const updateProfile = (event)=>{
+    const updateProfile = async (event)=>{
         event.preventDefault();
-        console.log(data)
+        await axios.put("http://localhost:8080/user/" + (1122).toString(),data)
+                .then((res)=>{
+                   if(res.status===200)
+                    {
+                        window.location.reload(false); 
+                        alert("successfully updated!!")
+                    }
+                })
+                .catch((err)=>
+                        console.log(err))
     }
 
     const cancelUpdate = async (event)=>{ 
@@ -45,12 +54,14 @@ function Profile() {
 
 
     return (
+        <div>
+           
         <div className="card mx-auto mt-5" style={{ width: '50vw' }}>
             <div className="card-header">
                 <h5 className="float-start">Profile</h5>
                {update? <button onClick={cancelUpdate} className='float-end' style={{borderColor:'transparent',backgroundColor:'transparent'}}>
                                     <IoCloseCircleOutline size='2rem' color='red'/></button> :
-                        <button className='btn btn-primary float-end' onClick={() => {setUpdate(true);console.log(data)}}>Update</button>
+                        <button className='btn btn-primary float-end' onClick={() => {setUpdate(true);}}>Update</button>
                 }
             </div>
             <div className="card-body">
@@ -91,7 +102,7 @@ function Profile() {
                 {update && <button className="btn btn-primary float-end" onClick={updateProfile} >Save</button>}
             </div>
         </div>
-
+     </div>
     )
 }
 
