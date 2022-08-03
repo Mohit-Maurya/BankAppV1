@@ -7,11 +7,10 @@ export const getUser = (req, res) => {
     User.findOne({userId : req.params.userId}, (err, result) => {
         if (err){
             //server error
-            res.status(500);
-            res.send(err);
+            return res.status(500).send(err);
         }
         else if(result){
-            res.send(result);
+            return res.status(200).send(result);
         }
         res.sendStatus(404);
     });
@@ -61,7 +60,7 @@ export const addNewUser = (req, res) => {
         }
         else if(result){
             console.log("New user added for approval: " + result);
-            res.send(result);
+            res.status(200).send(result);
         }
         // res.sendStatus(404);
     });
