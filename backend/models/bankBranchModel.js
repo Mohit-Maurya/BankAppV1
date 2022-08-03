@@ -2,8 +2,8 @@ import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
 
-export const bankBranchSchema = new Schema({
-    IFSC: {
+export const BankBranchSchema = new Schema({
+    ifsc: {
         type: String,
         required: true
     },
@@ -24,7 +24,7 @@ export const bankBranchSchema = new Schema({
             type: String,
             required: true
         },
-        pinCode: {
+        pincode: {
             type: String,
             required: true
         }

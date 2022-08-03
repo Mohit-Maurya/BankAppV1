@@ -3,11 +3,11 @@ import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
 export const AccountSchema = new Schema({
-    accountHolderId: {
+    accountNumber: {
         type: String,
         required: true
     },
-    accountNumber: {
+    userId: {
         type: String,
         required: true
     },
@@ -16,15 +16,19 @@ export const AccountSchema = new Schema({
         required: true
     },
     branch: {
-        branchId: {
+        ifsc: {
             type: String,
             required: true
         },
-        branchCity: {
+        branchName: {
             type: String,
             required: true
         },
-        branchState: {
+        city: {
+            type: String,
+            required: true
+        },
+        state: {
             type: String,
             required: true
         },

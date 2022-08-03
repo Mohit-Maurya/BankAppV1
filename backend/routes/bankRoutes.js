@@ -7,6 +7,16 @@ import {
     addNewUser
 } from "../controllers/userControllers";
 
+import {
+    addNewAccount,
+    getUserAccounts
+} from "../controllers/accountControllers";
+
+import {
+    getBranches,
+    getBankLocations
+} from "../controllers/bankBranchControllers";
+
 
 const routes = (app) => {
     app.route("/users")
@@ -21,6 +31,22 @@ const routes = (app) => {
 
     // app.route("/admin/:employeeId")
     // .get(getAdmin)
+
+    app.route("/accounts")
+    .post(addNewAccount)
+
+    // accountHolderIs == userId
+    app.route("/accounts/:userId")
+    .get(getUserAccounts)
+
+
+
+    app.route("/bank-branch")
+    .get(getBranches)
+
+    app.route("/bank-branch/locations")
+    .get(getBankLocations)
+    
 
 }
 
