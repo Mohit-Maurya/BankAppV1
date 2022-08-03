@@ -44,43 +44,9 @@ export const verifyUser = (req, res) => {
 export const updateUser = (req, res) => {
    User.findOneAndUpdate({userId:req.params.userId},req.body,{new:true},(err,User)=>{
     if(err)
-        res.send(err);  
-    res.status(200).send("Update User Successfully")    
+        return res.send(err);  
+    res.status(200).send("Update User Successfully");    
  })
-    // const updateUser = new User(req.body);
-    // updateUser.userId = req.params.userId;
-    // updateUser.status = "Approved";
-
-    // User.deleteOne({userId : req.params.userId}, (err, result) => {
-    //     if (err){
-    //         //server error
-    //         res.status(500);
-    //         res.send(err);
-    //     } 
-    //     else if(result.deletedCount){
-    //         console.log("Updating user: ", typeof(result.deletedCount));
-    //     }
-    //     else {
-    //         res.status(404);
-    //         res.send("User with userId: " + userId + ". Not found.");
-    //     }   
-    // });
-
-    // updateUser.save((err, result) => {
-    //     if (err){
-    //         //server error
-    //         res.status(500);
-    //         res.send(err);
-    //     }
-    //     else if(result){
-    //         console.log("Updated user: ", result);
-    //         res.send(result);
-    //     } 
-    //     else {
-    //         res.status(404);
-    //         res.send("Unauthorised User");
-    //     }
-    // }); 
 };
 
 // DELETE (actually using PATCH)
