@@ -1,11 +1,11 @@
+import { Double } from "mongodb";
 import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
 
 export const AccountSchema = new Schema({
     accountNumber: {
-        type: String,
-        required: true
+        type: String
     },
     userId: {
         type: String,
@@ -34,7 +34,7 @@ export const AccountSchema = new Schema({
         },
     },
     balance: {
-        type: String,
+        type: Number,
         required: true
     },
     status: {
