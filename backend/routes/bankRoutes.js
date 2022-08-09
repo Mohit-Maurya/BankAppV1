@@ -10,13 +10,15 @@ import {
 import {
     addNewAccount,
     getUserAccounts,
-    getAccount
+    getAccount,
+    transaction
 } from "../controllers/accountControllers";
 
 import {
     getBranches,
     getBankLocations
 } from "../controllers/bankBranchControllers";
+import { Transaction } from "mongodb";
 
 
 const routes = (app) => {
@@ -45,10 +47,10 @@ const routes = (app) => {
 
     app.route("/accounts/:accountNumber")
     .get(getAccount)
-    
-    
 
-
+    app.route("/accounts/transactions")
+    .put(transaction)
+    
 
     //-------bank-branches------
     app.route("/bank-branch")

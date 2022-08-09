@@ -3,6 +3,36 @@ import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
 
+export const TransactionSchema = new Schema({
+    transactionId: {
+        type: String
+    },
+    action: {
+        type: String, // (deposit / sent / received)
+        required: true
+    },
+    depositSource: {
+        type: String,
+    },
+    toAccountNo: {
+        type: String
+    },
+    fromAccountNo: {
+        type: String
+    },
+    amount: {
+        type: Number,
+        required: true
+    },
+    balance: {
+        type: Number,
+        required: true
+    },
+    transactionTime: {
+        type: Date
+    }
+}, {_id: false});
+
 export const AccountSchema = new Schema({
     accountNumber: {
         type: String
@@ -44,8 +74,5 @@ export const AccountSchema = new Schema({
         type: Array,
         "default": []
     },
-    transactions: {
-        type: Array,
-        "default": []
-    }
+    transactions: [TransactionSchema]
 }, { collection: 'accounts' })

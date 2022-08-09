@@ -42,10 +42,8 @@ export const verifyUser = (req, res) => {
 
 // PUT
 export const updateUser = (req, res) => {
-   User.findOneAndUpdate({userId:req.params.userId},req.body,{new:true},(err,User)=>{
-    if(err)
-
-        return res.send(err); 
+   User.findOneAndUpdate({userId:req.params.userId},req.body,{new:true},(err, result)=>{
+    if(err) throw err;
     res.status(200).send("Update User Successfully")    
  })};
 
@@ -54,6 +52,7 @@ export const updateUser = (req, res) => {
 // DELETE (actually using PATCH)
 export const deleteUser = (req, res) => {
 
+    // TODO: change status for account to deleted --- Mohit
     console.log(req.params.userId);
     User.updateOne(
         {userId: req.params.userId},
@@ -94,6 +93,7 @@ export const getUsers = (req, res) => {
 };
 
 // POST
+// TODO: encrypt password --- Sweety
 export const addNewUser = (req, res) => {
     const newUser = new User(req.body);
     newUser.userId = newUser.mobileNumber;
