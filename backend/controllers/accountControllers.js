@@ -11,7 +11,7 @@ export const addNewAccount = (req, res) => {
     const newAccount = new Account(req.body);
     newAccount.status = "active";
 
-    //Create new account number
+    //Create new account number: Algorithm
     const date = new Date();
     const hours = date.getHours().toString();
     const minutes = date.getMinutes().toString();
