@@ -44,9 +44,12 @@ export const verifyUser = (req, res) => {
 export const updateUser = (req, res) => {
    User.findOneAndUpdate({userId:req.params.userId},req.body,{new:true},(err,User)=>{
     if(err)
+
         return res.send(err); 
     res.status(200).send("Update User Successfully")    
  })};
+
+
 
 // DELETE (actually using PATCH)
 export const deleteUser = (req, res) => {
