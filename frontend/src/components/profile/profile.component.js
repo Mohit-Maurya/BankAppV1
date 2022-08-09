@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { IoCloseCircleOutline ,IoCallSharp,IoMail,IoHome} from "react-icons/io5";
 import axios from 'axios';
 
 function Profile() {
 
+    const {state} = useLocation()
+    const {userid} = state
     const [data, setData] = useState({
         name: '', pan: '', email: '', temporaryAddress: '', aadhaarNumber: '',
         mobileNumber: '', permanentAddress: ''
@@ -12,9 +15,8 @@ function Profile() {
     const [update, setUpdate] = useState(false)
 
     const getUser = async () => {
-        await axios.get("http://localhost:8080/user/" + (1122).toString())
+        await axios.get("http://localhost:8080/user/" + userid)
             .then((res) => {
-                console.log(res)
                 setData({
                     name: res.data.name, pan: res.data.pan, email: res.data.email,
                     temporaryAddress: res.data.temporaryAddress, aadhaarNumber: res.data.aadhaarNumber,
@@ -28,11 +30,11 @@ function Profile() {
 
     const updateProfile = async (event) => {
         event.preventDefault();
-        await axios.put("http://localhost:8080/user/" + (1122).toString(), data)
+        console.log(data)
+        await axios.put(`http://localhost:8080/user/${userid}`, data)
             .then((res) => {
                 if (res.status === 200) {
                     window.location.reload(false);
-                    alert("successfully updated!!")
                 }
             })
             .catch((err) =>
@@ -49,12 +51,12 @@ function Profile() {
 
     useEffect(() => {
         getUser()
-    }, [])
+    },[])
 
 
     return (
         <div>
-            
+            {/* <ToastContainer hideProgressBar={true} autoClose={3000} closeOnClick={true} pauseOnHover={true}/> */}
             <div className="card mx-auto mt-5" style={{ width: '50vw' }}>
                 <div className="card-header">
                     <h5 className="float-start">Profile</h5>
@@ -84,7 +86,7 @@ function Profile() {
                     <div className='row'>
                         <div className="col-6 form-group mb-3">
                             <label><IoCallSharp className='mb-1'/> <b>Mobile Number  </b></label>
-                            {update ? <input type="text" className="form-control" id="mobile" defaultValue={data.mobileNumber} onChange={(e) => setData((prevState) => ({ ...prevState, mobileNumber: e.target.value }))} disabled={!update} />
+                            {update ? <input type="text" className="form-control" id="mobile" defaultValue={data.mobileNumber} onChange={(e) => setData((prevState) => ({ ...prevState, mobileNumber: e.target.value }))}disabled={!update} />
                                 : <p className='ms-3'>  {data.mobileNumber}</p>}
                         </div>
                         <div className="col-6 form-group mb-3">
