@@ -9,16 +9,10 @@ function Login() {
 
     const submitUserLogin = (event) => {
         event.preventDefault();
-        console.log(login.userid, login.password);
-        // let headers= {
-        //     "Content-Type": "application/json",
-        //     "Access-Control-Allow-Origin": "*"
-        // }
         axios.post('http://localhost:8080/user/'+login.userid,login)
             .then((res)=>{
-                console.log(res);
                 if(res.data==="Authorized User")
-                    navigate('/profile')    
+                    navigate('/profile',{state:{userid:login.userid}})    
             })
             .catch((err)=>{
                 if(err.response.data==="Unauthorised User")

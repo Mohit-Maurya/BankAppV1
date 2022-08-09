@@ -12,7 +12,6 @@ function Registration() {
     const onSignUp = (event)=>{
         event.preventDefault();
 
-        console.log(data);
         axios.post("http://localhost:8080/users",data)
                     .then((res)=>{
                         if(res.status===200)
