@@ -37,3 +37,14 @@ export const getUserAccounts = (req, res) => {
         return res.send(result);
     });
 }
+
+
+// "/accounts/:accountNumber"
+
+// GET
+export const getAccount = (req, res) => {
+    Account.findOne({accountNumber: req.params.accountNumber}, (err, result) => {
+        if (err) throw err;
+        return res.send(result);
+    });
+}

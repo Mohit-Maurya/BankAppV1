@@ -9,7 +9,8 @@ import {
 
 import {
     addNewAccount,
-    getUserAccounts
+    getUserAccounts,
+    getAccount
 } from "../controllers/accountControllers";
 
 import {
@@ -19,6 +20,8 @@ import {
 
 
 const routes = (app) => {
+
+    //---------users----------
     app.route("/users")
     .get(getUsers)
     .post(addNewUser)
@@ -32,6 +35,7 @@ const routes = (app) => {
     // app.route("/admin/:employeeId")
     // .get(getAdmin)
 
+    //--------accounts--------
     app.route("/accounts")
     .post(addNewAccount)
 
@@ -39,8 +43,14 @@ const routes = (app) => {
     app.route("/accounts/:userId")
     .get(getUserAccounts)
 
+    app.route("/accounts/:accountNumber")
+    .get(getAccount)
+    
+    
 
 
+
+    //-------bank-branches------
     app.route("/bank-branch")
     .get(getBranches)
 
