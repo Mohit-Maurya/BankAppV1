@@ -7,6 +7,8 @@ import './index.css';
 // import App from './App';
 import Login from "./components/login/login.component";
 import Profile from './components/profile/profile.component';
+import Accounts from './components/accounts/accounts.component';
+import AccountById from './components/accountById/accountById.component';
 import Registration from './components/registration/registration.component';
 
 
@@ -18,6 +20,8 @@ root.render(
         <Route path="/" element={<Login/>} />
         <Route path="/registration" element={<Registration/>} />
         <Route path='/profile' element={<Profile />} />
+        <Route path='/accounts' element={<Accounts/>}/>
+        <Route path='/accounts/account' element={<AccountById/>}/>
       </Routes>
     </BrowserRouter>
   </React.StrictMode>
