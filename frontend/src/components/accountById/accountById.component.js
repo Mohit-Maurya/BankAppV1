@@ -1,9 +1,22 @@
-import React from 'react';
+import React,{useEffect, useState} from 'react';
 import {useLocation} from 'react-router-dom';
+import axios from 'axios';
 
 function AccountById() {
     const { state } = useLocation()
-    const { account } = state
+    const { accountNumber } = state
+    const [account,setAccount] = useState()
+
+    useEffect(()=>{
+        axios.get("http://localhost:8080/accounts/"+accountNumber)
+                    .then((res)=>{
+                        //    setAccount(res) 
+                        console.log(res)
+                    })
+                    .catch((err)=>console.log(err))
+        console.log(accountNumber)
+    },[])
+
 
     return (
         <div>
@@ -11,28 +24,28 @@ function AccountById() {
                 <div className="card-body">
                     <div className='col'>
                         <div className='row mb-5'>
-                            <h4>Account Number : {account.accountNumber}</h4>
+                            {/* <h4>Account Number : {account.accountNumber}</h4> */}
                         </div>
                         <div className='row mb-3'>
                             <div className='col-6'>
-                                <b>Branch Name : </b> {account.branch.branchName}
+                                {/* <b>Branch Name : </b> {account.branch.branchName} */}
                             </div>
                             <div className='col-6'>
-                                <b>Balance :</b> {account.balance}
+                                {/* <b>Balance :</b> {account.balance} */}
                             </div>
                         </div>
                         <div className='row mb-5'>
                             <div className='col-6'>
-                                <b>IFSC : </b>{account.branch.ifsc} 
+                                {/* <b>IFSC : </b>{account.branch.ifsc}  */}
                             </div>
                             <div className='col-6'>
-                                <b>Account Type : </b> {account.accountType}
+                                {/* <b>Account Type : </b> {account.accountType} */}
                             </div>
                         </div>
                         <div className='row mt-5 mb-5'>
                             <div className='col-6'>
                                 <div className="card">
-                                    <div class="card-body mb-3">
+                                    <div className="card-body mb-3">
                                         <div className="col-9 mb-3">
                                             <label className="form-label">Deposit Amount</label>
                                             <input type="text" className="form-control" id="depositAmount" />

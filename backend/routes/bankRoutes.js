@@ -9,16 +9,21 @@ import {
 
 import {
     addNewAccount,
-    getUserAccounts
+    getUserAccounts,
+    getAccount,
+    transaction
 } from "../controllers/accountControllers";
 
 import {
     getBranches,
     getBankLocations
 } from "../controllers/bankBranchControllers";
+import { Transaction } from "mongodb";
 
 
 const routes = (app) => {
+
+    //---------users----------
     app.route("/users")
     .get(getUsers)
     .post(addNewUser)
@@ -32,6 +37,7 @@ const routes = (app) => {
     // app.route("/admin/:employeeId")
     // .get(getAdmin)
 
+    //--------accounts--------
     app.route("/accounts")
     .post(addNewAccount)
 
@@ -39,8 +45,14 @@ const routes = (app) => {
     app.route("/accounts/:userId")
     .get(getUserAccounts)
 
+    app.route("/accounts/:accountNumber")
+    .get(getAccount)
 
+    app.route("/accounts/transactions")
+    .put(transaction)
+    
 
+    //-------bank-branches------
     app.route("/bank-branch")
     .get(getBranches)
 

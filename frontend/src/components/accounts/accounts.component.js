@@ -27,7 +27,7 @@ function Accounts() {
     let accountTypesList = accountTypes.map((type) => <option id={type}>{type}</option>)
     let accountsList = accounts.map((a,i) => {
         return (
-            <div className="card m-3"  key={i} onClick={()=>{ navigate('/accounts/account',{state:{account:a}}) }}>
+            <div className="card m-3"  key={i} onClick={()=>{ navigate('/accounts/account',{state:{accountNumber:a.accountNumber}}) }}>
                 <div className="card-body"  key={i}>
                     <div className="row"> 
                         <div className="col-7">
