@@ -45,7 +45,7 @@ const routes = (app) => {
     app.route("/accounts/:userId")
     .get(getUserAccounts)
 
-    app.route("/accounts/:accountNumber")
+    app.route("/account/:accountNumber")
     .get(getAccount)
 
     app.route("/accounts/transactions")

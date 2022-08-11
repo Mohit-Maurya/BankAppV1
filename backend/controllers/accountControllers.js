@@ -47,36 +47,36 @@ export const getUserAccounts = (req, res) => {
 }
 
 
-// "/accounts/:accountNumber"
+// "/account/:accountNumber"
 
 // GET
 export const getAccount = (req, res) => {
-    console.log(req.params.accountNumber)
-    Account.find({accountNumber: req.params.accountNumber}, (err, result) => {
+    Account.findOne({accountNumber: req.params.accountNumber}, (err, result) => {
         if (err) throw err;
-        console.log(result)
         return res.send(result);
     });
 }
 
 // PUT: (insert transaction object in account and update balance)
 export const transaction = (req, res) => {
-
+    
+    // console.log(req.body)
     // creating transactionId
     const date = new Date();
     const hours = date.getHours().toString();
     const minutes = date.getMinutes().toString();
     const seconds = date.getSeconds().toString();
     const accountNumber = req.body.accountNumber;
-    const amount = req.body.transactions[req.body.transactions.length - 1].amount;
+    const amount = req.body.newTransaction.amount;
     const transactionId = hours + minutes + seconds + accountNumber + amount + randomIntFromInterval(11, 99);
 
-    req.body.transactions[req.body.transactions.length - 1].transactionTime = date;
-    req.body.transactions[req.body.transactions.length - 1].transactionId = transactionId;
+    req.body.newTransaction.transactionTime = date;
+    req.body.newTransaction.transactionId = transactionId;
     console.log(req.body)
-    Account.findOneAndUpdate(
+    console.log("--------------------------------------------------")
+    Account.updateOne(
         {accountNumber: req.body.accountNumber},
-        req.body,
+        { $push: { transactions:{...req.body.newTransaction} } },
         {new:true},
         (err, result) => {
             if(err) throw err;

@@ -48,7 +48,6 @@ function Accounts() {
         axios.get(`http://localhost:8080/accounts/${userid}`)
             .then((res) => {
                 setAccounts(res.data)
-                console.log(res.data)
             })
             .catch((err) => console.log(err))
 
