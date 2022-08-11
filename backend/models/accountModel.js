@@ -11,7 +11,7 @@ export const TransactionSchema = new Schema({
         type: String, // (deposit / sent / received)
         required: true
     },
-    depositSource: {
+    depositSource: { // to be hardcoded in frontend
         type: String,
     },
     toAccountNo: {
