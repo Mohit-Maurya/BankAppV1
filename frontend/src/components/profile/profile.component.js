@@ -48,6 +48,13 @@ function Profile() {
         event.preventDefault();
     }
 
+    const deleteProfile = async (event) => {
+        event.preventDefault()
+        axios.delete(`http://localhost:8080/user/${userid}`)
+            .then((res)=>console.log(res))
+            .catch((err)=>console.log(err))
+    }
+
 
     useEffect(() => {
         getUser()
@@ -107,7 +114,8 @@ function Profile() {
                     </div>
                     <br />
                     {/* <p><span style={{ color: 'red' }}>{login.error}</span></p> */}
-                    {update && <button className="btn btn-primary float-end" onClick={updateProfile} >Save</button>}
+                    {update ? <button className="btn btn-primary float-end" onClick={updateProfile}>Save</button> : 
+                                <button className="btn btn-danger float-end" onClick={deleteProfile}>Delete Profile</button> }
                 </div>
             </div>
         </div>

@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import bcrypt from 'bcrypt';
 import { UserSchema } from "../models/userModel";
 
 const User = mongoose.model("User", UserSchema);
@@ -22,7 +23,7 @@ export const getUser = (req, res) => {
 };
 
 // POST
-export const verifyUser = (req, res) => {
+export const verifyUser = async(req, res) => {
     User.findOne({userId : req.params.userId}, (err, result) => {
         if (err){
             //server error
@@ -30,7 +31,7 @@ export const verifyUser = (req, res) => {
             res.send(err);
         }
         else if(result && result.status != "deleted"){
-            if(result.password == req.body.password){
+            if(bcrypt.compare(req.body.password,result.password)){
                return res.send("Authorized User");
             }
         } else {
@@ -94,8 +95,11 @@ export const getUsers = (req, res) => {
 
 // POST
 // TODO: encrypt password --- Sweety
-export const addNewUser = (req, res) => {
+export const addNewUser = async (req, res) => {
     const newUser = new User(req.body);
+    const salt = await bcrypt.genSalt(10)
+    const hashedPassword = await bcrypt.hash(newUser.password,salt)
+    newUser.password = hashedPassword
     newUser.userId = newUser.mobileNumber;
     newUser.status = "Pending";
 

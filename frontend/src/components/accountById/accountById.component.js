@@ -5,6 +5,9 @@ import axios from 'axios';
 function AccountById() {
     const { state } = useLocation()
     const { accountNumber } = state
+    const [err, setErr] = useState('')
+    const [msg, setMsg] = useState('')
+    const [show, setShow] = useState(false)
     const [account, setAccount] = useState({ accountNumber: '', balance: '', accountType: '' })
     const [branch, setBranch] = useState({ branchName: '', city: '', state: '', ifsc: '' })
     const [sentAcc, setSentAcc] = useState()
@@ -28,14 +31,6 @@ function AccountById() {
             .catch((err) => console.log(err))
     }, [])
 
-    const depositAmount = async (event) => {
-        event.preventDefault()
-        console.log(transactions)
-        axios.put("http://localhost:8080/accounts/transactions", { accountNumber: account.accountNumber, transactions: [...transactions], newTransaction: transaction })
-            .then((res) => console.log(res))
-            .catch((err) => console.log(err))
-    }
-
     const onChangeDepoAmount = async (e) => {
         setTransaction({ action: 'Deposit', depositSource: 'Paytm', toAccountNo: '', fromAccountNo: '', amount: parseFloat(e.target.value), balance: account.balance - parseFloat(e.target.value) })
     }
@@ -48,13 +43,29 @@ function AccountById() {
         event.preventDefault()
         console.log(transactions)
         axios.put("http://localhost:8080/accounts/transactions", { accountNumber: account.accountNumber, transactions: [...transactions], newTransaction: transaction })
-            .then((res) => console.log(res))
-            .catch((err) => console.log(err))
+            .then((res) => {
+                console.log(res)
+                setMsg(res.data)
+                setShow(true)
+                setTimeout(() => { setShow(false) }, 1500)
+            })
+            .catch((err) => {
+                console.log(err)
+                setErr(err)
+                setShow(true)
+                setTimeout(() => { setShow(false) }, 1500)
+            })
     }
 
     return (
         <div>
-            <div className="card mx-auto mt-5" style={{ width: '90vw' }}>
+            {show &&
+
+                <div className="toast-body" style={{ backgroundColor: 'green' }}>
+                    <h5 style={{ color: 'white' }}>{msg} completed successfully ....</h5>
+                </div>
+            }
+            <div className="card mx-auto mt-5" style={{ width: '90vw' }} >
                 <div className="card-body">
                     <div className='col'>
                         <div className='row mb-5'>
@@ -85,7 +96,7 @@ function AccountById() {
                                             <input type="text" className="form-control" id="depositAmount" onChange={onChangeDepoAmount} />
                                         </div>
                                         <div className="col-12" >
-                                            <button className='btn btn-primary float-end' type='submit' onClick={depositAmount}>Submit</button>
+                                            <button className='btn btn-primary float-end' type='submit' onClick={sendAmount}>Submit</button>
                                         </div>
                                     </div>
                                 </div>
@@ -96,7 +107,7 @@ function AccountById() {
                                         <div className='row mb-3'>
                                             <div className="col-6">
                                                 <label className="form-label"><b>To</b></label>
-                                                <input type="text" className="form-control" id="toAccountNumber" placeholder='Account number' onChange={(e)=>setSentAcc(e.target.value)} />
+                                                <input type="text" className="form-control" id="toAccountNumber" placeholder='Account number' onChange={(e) => setSentAcc(e.target.value)} />
                                             </div>
                                             <div className="col-6">
                                                 <label className="form-label"><b>Amount</b></label>

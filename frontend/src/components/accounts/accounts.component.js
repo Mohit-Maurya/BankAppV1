@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useLocation,useNavigate } from 'react-router-dom';
+import "./accounts.component.css"
 import axios from "axios";
 
 function Accounts() {
@@ -27,7 +28,7 @@ function Accounts() {
     let accountTypesList = accountTypes.map((type) => <option id={type}>{type}</option>)
     let accountsList = accounts.map((a,i) => {
         return (
-            <div className="card m-3"  key={i} onClick={()=>{ navigate('/accounts/account',{state:{accountNumber:a.accountNumber}}) }}>
+            <div className="card card-account m-3"  key={i} onClick={()=>{ navigate('/accounts/account',{state:{accountNumber:a.accountNumber}}) }}>
                 <div className="card-body"  key={i}>
                     <div className="row"> 
                         <div className="col-7">
@@ -95,6 +96,7 @@ function Accounts() {
         setStates([])
         setCities([])
         setBranchNames([])
+        setSelectedAccounttype('')
         setSelectedBranch({state:'',city:'', branchName: '',ifsc:''})
     }
 
@@ -106,6 +108,11 @@ function Accounts() {
                                     .then((res) => {
                                         setAccounts(res.data)
                                         console.log(res.data)
+                                        setStates([])
+                                        setCities([])
+                                        setBranchNames([])
+                                        setSelectedAccounttype('')
+                                        setSelectedBranch({state:'',city:'', branchName: '',ifsc:''})
                                     })
                                     .catch((err) => console.log(err))
                             })
