@@ -1,52 +1,59 @@
-import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
-import { IoCloseCircleOutline ,IoCallSharp,IoMail,IoHome} from "react-icons/io5";
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
+import {
+  IoCloseCircleOutline,
+  IoCallSharp,
+  IoMail,
+  IoHome,
+} from "react-icons/io5";
+import axios from "axios";
 
 function Profile() {
+  const { state } = useLocation();
+  const { userid } = state;
+  const [data, setData] = useState({
+    name: "",
+    pan: "",
+    email: "",
+    temporaryAddress: "",
+    aadhaarNumber: "",
+    mobileNumber: "",
+    permanentAddress: "",
+  });
 
-    const {state} = useLocation()
-    const {userid} = state
-    const [data, setData] = useState({
-        name: '', pan: '', email: '', temporaryAddress: '', aadhaarNumber: '',
-        mobileNumber: '', permanentAddress: ''
-    })
+  const [update, setUpdate] = useState(false);
 
-    const [update, setUpdate] = useState(false)
+  const getUser = async () => {
+    await axios
+      .get("http://localhost:8080/user/" + userid)
+      .then((res) => {
+        setData({
+          name: res.data.name,
+          pan: res.data.pan,
+          email: res.data.email,
+          temporaryAddress: res.data.temporaryAddress,
+          aadhaarNumber: res.data.aadhaarNumber,
+          mobileNumber: res.data.mobileNumber,
+          permanentAddress: res.data.permanentAddress,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
-    const getUser = async () => {
-        await axios.get("http://localhost:8080/user/" + userid)
-            .then((res) => {
-                setData({
-                    name: res.data.name, pan: res.data.pan, email: res.data.email,
-                    temporaryAddress: res.data.temporaryAddress, aadhaarNumber: res.data.aadhaarNumber,
-                    mobileNumber: res.data.mobileNumber, permanentAddress: res.data.permanentAddress
-                })
-            })
-            .catch((err) => {
-                console.log(err)
-            })
-    }
-
-    const updateProfile = async (event) => {
-        event.preventDefault();
-        console.log(data)
-        await axios.put(`http://localhost:8080/user/${userid}`, data)
-            .then((res) => {
-                if (res.status === 200) {
-                    window.location.reload(false);
-                }
-            })
-            .catch((err) =>
-                console.log(err))
-    }
-
-    const cancelUpdate = async (event) => {
-        if (window.confirm("Changes will not be saved") === true) {
-            window.location.reload(false);
+  const updateProfile = async (event) => {
+    event.preventDefault();
+    console.log(data);
+    await axios
+      .put(`http://localhost:8080/user/${userid}`, data)
+      .then((res) => {
+        if (res.status === 200) {
+          window.location.reload(false);
         }
-        event.preventDefault();
-    }
+      })
+      .catch((err) => console.log(err));
+  };
 
     const deleteProfile = async (event) => {
         event.preventDefault()
@@ -55,11 +62,16 @@ function Profile() {
             .catch((err)=>console.log(err))
     }
 
+  const cancelUpdate = async (event) => {
+    if (window.confirm("Changes will not be saved") === true) {
+      window.location.reload(false);
+    }
+    event.preventDefault();
+  };
 
-    useEffect(() => {
-        getUser()
-    },[])
-
+  useEffect(() => {
+    getUser();
+  }, []);
 
     return (
         <div>
@@ -118,8 +130,85 @@ function Profile() {
                                 <button className="btn btn-danger float-end" onClick={deleteProfile}>Delete Profile</button> }
                 </div>
             </div>
+            {/* <div className="col-6 form-group mb-3">
+              <label>
+                <IoMail className="mb-1" /> <b> Email </b>
+              </label>
+              {update ? (
+                <input
+                  type="text"
+                  className="form-control"
+                  id="email"
+                  defaultValue={data.email}
+                  onChange={(e) =>
+                    setData((prevState) => ({
+                      ...prevState,
+                      email: e.target.value,
+                    }))
+                  }
+                  disabled={!update}
+                />
+              ) : (
+                <p className="ms-3"> {data.email}</p>
+              )}
+            </div>
+          </div>
+          <div className="col-11 form-group mb-3">
+            <label>
+              <IoHome className="mb-1" /> <b> Permanent Address </b>{" "}
+            </label>
+            {update ? (
+              <input
+                type="text"
+                className="form-control"
+                id="permanentAddress"
+                defaultValue={data.permanentAddress}
+                onChange={(e) =>
+                  setData((prevState) => ({
+                    ...prevState,
+                    permanentAddress: e.target.value,
+                  }))
+                }
+                disabled={!update}
+              />
+            ) : (
+              <p className="ms-3"> {data.permanentAddress}</p>
+            )}
+          </div>
+          <div className="col-11 form-group mb-3">
+            <label>
+              <IoHome className="mb-1" /> <b> Temporary Address </b>{" "}
+            </label>
+            {update ? (
+              <input
+                type="text"
+                className="form-control"
+                id="temporaryAddress"
+                defaultValue={data.temporaryAddress}
+                onChange={(e) =>
+                  setData((prevState) => ({
+                    ...prevState,
+                    temporaryAddress: e.target.value,
+                  }))
+                }
+                disabled={!update}
+              />
+            ) : (
+              <p className="ms-3"> {data.temporaryAddress}</p>
+            )}
+          </div>
+          <br /> */}
+          {/* <p><span style={{ color: 'red' }}>{login.error}</span></p> */}
+          {update && (
+            <button
+              className="btn btn-primary float-end"
+              onClick={updateProfile}
+            >
+              Save
+            </button>
+          )}
         </div>
-    )
+  );
 }
 
 export default Profile;
