@@ -11,7 +11,8 @@ import {
     addNewAccount,
     getUserAccounts,
     getAccount,
-    transaction
+    transaction,
+    deleteAccount
 } from "../controllers/accountControllers";
 
 import {
@@ -34,8 +35,6 @@ const routes = (app) => {
     .put(updateUser)
     .delete(deleteUser)
 
-    // app.route("/admin/:employeeId")
-    // .get(getAdmin)
 
     //--------accounts--------
     app.route("/accounts")
@@ -44,9 +43,11 @@ const routes = (app) => {
     // accountHolderIs == userId
     app.route("/accounts/:userId")
     .get(getUserAccounts)
+    // .delete(deleteUserAccounts)
 
     app.route("/account/:accountNumber")
     .get(getAccount)
+    .delete(deleteAccount)
 
     app.route("/accounts/transactions")
     .put(transaction)

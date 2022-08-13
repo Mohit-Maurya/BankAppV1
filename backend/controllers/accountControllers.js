@@ -49,6 +49,17 @@ export const getUserAccounts = (req, res) => {
     });
 }
 
+//DELETE (actually using PATCH)
+export const deleteUserAccounts = (req, res) => {
+    Account.updateMany(
+        {userId: req.params.userId},
+        {status: "deleted"},
+        (err, result) => {
+            if(err) throw err;
+        }
+    );
+}
+
 
 // "/account/:accountNumber"
 
@@ -61,6 +72,22 @@ export const getAccount = (req, res) => {
     });
 }
 
+// DELETE (actually using PATCH)
+export const deleteAccount = (req, res) => {
+    Account.updateOne(
+        {accountNumber: req.params.accountNumber},
+        {status: "deleted"},
+        (err, result) => {
+            if(err) throw err;
+            if(!result.modifiedCount) return res.send("Unable to delete given account.");
+            console.log("Updated status to deleted for accountNumber: ", req.params.accountNumber);
+            return res.send("Successfully deleted");
+        }
+    );
+}
+
+
+//"/accounts/transactions"
 // PUT
 export const transaction = async (req, res) => {
     console.log("req.body: \n" + req.body);
