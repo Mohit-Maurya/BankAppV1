@@ -43,11 +43,11 @@ export const addNewAccount = (req, res) => {
 
 // GET
 export const getUserAccounts = (req, res) => {
-    Account.find({userId: req.params.userId}, (err, result) => {
+    Account.find({$and: [{userId: req.params.userId}, {status: {$ne: "deleted"}}]}, (err, result) => {
         if (err) {
             throw err;
         }
-        else if(result && result.status != "deleted"){
+        else if(result){
             return res.send(result);
         } 
         else {
