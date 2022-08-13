@@ -14,7 +14,7 @@ function Login() {
       .post("http://localhost:8080/user/" + login.userid, login)
       .then((res) => {
         if (res.data === "Authorized User")
-          navigate("/profile", { state: { userid: login.userid } });
+          navigate("/accounts", { state: { userid: login.userid } });
       })
       .catch((err) => {
         if (err.response.data === "Unauthorised User")
