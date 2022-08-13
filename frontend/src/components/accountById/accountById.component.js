@@ -32,7 +32,7 @@ function AccountById() {
     }, [])
 
     const onChangeDepoAmount = async (e) => {
-        setTransaction({ action: 'Deposit', depositSource: 'Paytm', toAccountNo: '', fromAccountNo: '', amount: parseFloat(e.target.value), balance: account.balance - parseFloat(e.target.value) })
+        setTransaction({ action: 'Deposit', depositSource: 'Paytm', toAccountNo: '', fromAccountNo: '', amount: parseFloat(e.target.value), balance: account.balance + parseFloat(e.target.value) })
     }
 
     const onChangeSendAmount = async (e) => {

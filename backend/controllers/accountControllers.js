@@ -1,7 +1,10 @@
+import { Logger } from "mongodb";
 import mongoose from "mongoose";
+import { findOne } from "mongoose/lib/model";
 import { AccountSchema, TransactionSchema } from "../models/accountModel";
 
 const Account = mongoose.model("Account", AccountSchema);
+const Transaction = mongoose.model("Transaction", TransactionSchema);
 
 
 // "/accounts"
@@ -57,30 +60,57 @@ export const getAccount = (req, res) => {
     });
 }
 
-// PUT: (insert transaction object in account and update balance)
-export const transaction = (req, res) => {
-    
-    // console.log(req.body)
+// PUT
+export const transaction = async (req, res) => {
+    console.log("req.body: \n" + req.body);
+    const newTransaction = new Transaction(req.body.newTransaction);
     // creating transactionId
     const date = new Date();
     const hours = date.getHours().toString();
     const minutes = date.getMinutes().toString();
     const seconds = date.getSeconds().toString();
     const accountNumber = req.body.accountNumber;
-    const amount = req.body.newTransaction.amount;
+    const amount = newTransaction.amount;
     const transactionId = hours + minutes + seconds + accountNumber + amount + randomIntFromInterval(11, 99);
 
     req.body.newTransaction.transactionTime = date;
     req.body.newTransaction.transactionId = transactionId;
-    console.log(req.body)
-    console.log("--------------------------------------------------")
-    Account.updateOne(
+
+    const action = newTransaction.action;
+
+    if(action == "sent") {
+        const receiverAccount = await Account.findOne({accountNumber: newTransaction.toAccountNo}).exec();
+        // setting receiver balance
+        receiverAccount.balance += amount;
+        // creating receiver transaction object
+        const receiverNewTransaction = new Transaction();
+        receiverNewTransaction.transactionId = transactionId;
+        receiverNewTransaction.action = "received";
+        receiverNewTransaction.fromAccountNo = accountNumber;
+        receiverNewTransaction.amount = amount;
+        receiverNewTransaction.balance = receiverAccount.balance;
+        receiverNewTransaction.transactionTime = date;
+        //pushing to existing transactions array
+        receiverAccount.transactions.push(receiverNewTransaction);
+
+        Account.updateOne(
+            {accountNumber: newTransaction.toAccountNo},
+            receiverAccount,
+            {new:true},
+            (err, result) => {
+                if(err) throw err;
+                console.log(result);
+            }
+        );
+    }
+    Account.findOneAndUpdate(
         {accountNumber: req.body.accountNumber},
-        { $push: { transactions:{...req.body.newTransaction} } },
+        // account,
+        { $push: {transactions: {...req.body.newTransaction}}, 
+          $set: {balance: newTransaction.balance}},
         {new:true},
         (err, result) => {
             if(err) throw err;
-            console.log(result);
             res.send("TransactionId: " + transactionId);
         }
     );
