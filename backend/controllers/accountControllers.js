@@ -44,8 +44,15 @@ export const addNewAccount = (req, res) => {
 // GET
 export const getUserAccounts = (req, res) => {
     Account.find({userId: req.params.userId}, (err, result) => {
-        if (err) throw err;
-        return res.send(result);
+        if (err) {
+            throw err;
+        }
+        else if(result && result.status != "deleted"){
+            return res.send(result);
+        } 
+        else {
+            return res.sendStatus(404);
+        }
     });
 }
 
@@ -67,7 +74,7 @@ export const deleteUserAccounts = (req, res) => {
 export const getAccount = (req, res) => {
     Account.findOne({accountNumber: req.params.accountNumber}, (err, result) => {
         if (err) throw err;
-        if(!result) return res.send("Invalid account number");
+        if(!(result && result.status != "deleted")) return res.send("Invalid account number");
         return res.send(result);
     });
 }
