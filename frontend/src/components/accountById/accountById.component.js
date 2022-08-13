@@ -46,6 +46,7 @@ function AccountById() {
             .then((res) => {
                 console.log(res)
                 setMsg(res.data)
+                setAccount((prevState)=>({...prevState,balance:transaction.balance}))
                 setShow(true)
                 setTimeout(() => { setShow(false) }, 1500)
             })

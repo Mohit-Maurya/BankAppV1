@@ -56,6 +56,7 @@ export const getUserAccounts = (req, res) => {
 export const getAccount = (req, res) => {
     Account.findOne({accountNumber: req.params.accountNumber}, (err, result) => {
         if (err) throw err;
+        if(!result) return res.send("Invalid account number");
         return res.send(result);
     });
 }
