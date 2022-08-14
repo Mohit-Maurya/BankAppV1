@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import bcrypt from 'bcrypt';
 import { UserSchema } from "../models/userModel";
+import { deleteUserAccounts } from "./accountControllers";
 
 const User = mongoose.model("User", UserSchema);
 
@@ -52,8 +53,6 @@ export const updateUser = (req, res) => {
 
 // DELETE (actually using PATCH)
 export const deleteUser = (req, res) => {
-
-    // TODO: change status for account to deleted --- Mohit
     console.log(req.params.userId);
     User.updateOne(
         {userId: req.params.userId},
@@ -65,13 +64,13 @@ export const deleteUser = (req, res) => {
                 res.send(err);
             }
             else {
+                deleteUserAccounts(req, res);
                 console.log("Updated status to deleted for userId: ", req.params.userId);
                 res.sendStatus(200);
             }
         }
     );
 }
-
 
 
 // "/users"

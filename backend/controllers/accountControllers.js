@@ -43,10 +43,28 @@ export const addNewAccount = (req, res) => {
 
 // GET
 export const getUserAccounts = (req, res) => {
-    Account.find({userId: req.params.userId}, (err, result) => {
-        if (err) throw err;
-        return res.send(result);
+    Account.find({$and: [{userId: req.params.userId}, {status: {$ne: "deleted"}}]}, (err, result) => {
+        if (err) {
+            throw err;
+        }
+        else if(result){
+            return res.send(result);
+        } 
+        else {
+            return res.sendStatus(404);
+        }
     });
+}
+
+//DELETE (actually using PATCH)
+export const deleteUserAccounts = (req, res) => {
+    Account.updateMany(
+        {userId: req.params.userId},
+        {status: "deleted"},
+        (err, result) => {
+            if(err) throw err;
+        }
+    );
 }
 
 
@@ -56,11 +74,27 @@ export const getUserAccounts = (req, res) => {
 export const getAccount = (req, res) => {
     Account.findOne({accountNumber: req.params.accountNumber}, (err, result) => {
         if (err) throw err;
-        if(!result) return res.send("Invalid account number");
+        if(!(result && result.status != "deleted")) return res.send("Invalid account number");
         return res.send(result);
     });
 }
 
+// DELETE (actually using PATCH)
+export const deleteAccount = (req, res) => {
+    Account.updateOne(
+        {accountNumber: req.params.accountNumber},
+        {status: "deleted"},
+        (err, result) => {
+            if(err) throw err;
+            if(!result.modifiedCount) return res.send("Unable to delete given account.");
+            console.log("Updated status to deleted for accountNumber: ", req.params.accountNumber);
+            return res.send("Successfully deleted");
+        }
+    );
+}
+
+
+//"/accounts/transactions"
 // PUT
 export const transaction = async (req, res) => {
     console.log("req.body: \n" + req.body);
