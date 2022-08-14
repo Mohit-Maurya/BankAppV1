@@ -36,7 +36,7 @@ function AccountById() {
 
     const onChangeDepoAmount = async (e) => {
         if(e.target.value <=0 )
-            setSentErr((prevState)=>({...prevState,amount:"Amount must be a positive number"}))
+            setSentErr((prevState)=>({...prevState,amount:"Amount is a required field and must be a positive number"}))
         else{
             setSentErr((prevState)=>({...prevState,amount:""}))
             setTransaction({ action: 'Deposit', depositSource: 'Paytm', toAccountNo: '', fromAccountNo: '', amount: parseFloat(e.target.value), balance: account.balance + parseFloat(e.target.value) })
