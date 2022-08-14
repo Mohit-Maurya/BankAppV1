@@ -10,7 +10,7 @@ function AccountById() {
     const [err, setErr] = useState('')
     const [msg, setMsg] = useState('')
     const [show, setShow] = useState(false)
-    const [sentErr,setSentErr] = useState({account:"",amount:""})
+    const [sentErr,setSentErr] = useState({account:"",amount:"",samount:''})
     const [account, setAccount] = useState({ accountNumber: '', balance: '', accountType: '' })
     const [branch, setBranch] = useState({ branchName: '', city: '', state: '', ifsc: '' })
     const [sentAcc, setSentAcc] = useState()
@@ -35,15 +35,22 @@ function AccountById() {
     }, [account.balance])
 
     const onChangeDepoAmount = async (e) => {
-        setTransaction({ action: 'Deposit', depositSource: 'Paytm', toAccountNo: '', fromAccountNo: '', amount: parseFloat(e.target.value), balance: account.balance + parseFloat(e.target.value) })
+        if(e.target.value <=0 )
+            setSentErr((prevState)=>({...prevState,amount:"Amount must be a positive number"}))
+        else{
+            setSentErr((prevState)=>({...prevState,amount:""}))
+            setTransaction({ action: 'Deposit', depositSource: 'Paytm', toAccountNo: '', fromAccountNo: '', amount: parseFloat(e.target.value), balance: account.balance + parseFloat(e.target.value) })
+        }    
     }
 
     const onChangeSendAmount = async (e) => {
-        if(e.target.value > account.balance)
-            setSentErr((prevState)=>({...prevState,amount:"Amount must be less than balance"}))
+        if(e.target.value <=0 )
+            setSentErr((prevState)=>({...prevState,samount:"Amount must be a positive number"}))
+        else if(e.target.value > account.balance)
+            setSentErr((prevState)=>({...prevState,samount:"Amount must be less than balance"}))
         else    
         {
-            setSentErr((prevState)=>({...prevState,amount:""}))
+            setSentErr((prevState)=>({...prevState,samount:""}))
             setTransaction({ action: 'sent', depositSource: '', toAccountNo: sentAcc, fromAccountNo: '', amount: parseFloat(e.target.value), balance: account.balance - parseFloat(e.target.value) })
         }
     }
@@ -79,7 +86,7 @@ function AccountById() {
                 setMsg(res.data)
                 setAccount((prevState)=>({...prevState,balance:transaction.balance}))
                 setShow(true)
-                setTimeout(() => { setShow(false);setMsg("");window.location.reload(false);}, 1500)
+                setTimeout(() => { setShow(false);setMsg("");}, 1500)
             })
             .catch((err) => {
                 console.log(err)
@@ -147,6 +154,7 @@ function AccountById() {
                                         <div className="col-9 mb-3">
                                             <label className="form-label"><b>Deposit Amount</b></label>
                                             <input type="text" className="form-control" id="depositAmount" onChange={onChangeDepoAmount} />
+                                            <p><span style={{ color: 'red' }}>{sentErr.amount}</span></p>
                                         </div>
                                         <div className="col-12" >
                                             <button className='btn btn-primary float-end' type='submit' onClick={sendAmount}>Submit</button>
@@ -166,7 +174,7 @@ function AccountById() {
                                             <div className="col-6">
                                                 <label className="form-label"><b>Amount</b></label>
                                                 <input type="text" className="form-control" id="sendAmount" onChange={onChangeSendAmount} />
-                                                <p><span style={{ color: 'red' }}>{sentErr.amount}</span></p>
+                                                <p><span style={{ color: 'red' }}>{sentErr.samount}</span></p>
                                             </div>
                                         </div>
                                         <div className="col-12" >

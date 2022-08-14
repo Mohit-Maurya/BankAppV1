@@ -2,19 +2,28 @@ import React from "react";
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
+import {useDispatch,useSelector} from "react-redux";
+import {log_in} from '../../features/user'
 // import Navigation from "../navigation/nav.component";
 
 function Login() {
   const [login, setLogin] = useState({ userid: "", password: "", error: "" });
+  const user = useSelector((state)=>state.user.value)
+  const dispatch = useDispatch()
   let navigate = useNavigate();
 
   const submitUserLogin = (event) => {
     event.preventDefault();
+    console.log(login)
     axios
       .post("http://localhost:8080/user/" + login.userid, login)
       .then((res) => {
         if (res.data === "Authorized User")
-          navigate("/accounts", { state: { userid: login.userid } });
+          {
+            console.log("login user: ",login.userid)
+            dispatch(log_in({ userid: login.userid,loggedin:true }))
+            navigate("/accounts", { state: { userid: login.userid } });
+          }
       })
       .catch((err) => {
         if (err.response.data === "Unauthorised User")
@@ -24,6 +33,8 @@ function Login() {
           }));
         console.log(err);
       });
+
+      console.log(user.userid)
   };
 
   return (

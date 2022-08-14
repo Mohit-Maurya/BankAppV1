@@ -21,6 +21,7 @@ function Profile() {
     permanentAddress: "",
   });
 
+  const [refresh,setRefresh] = useState(false);
   const [update, setUpdate] = useState(false);
 
   const getUser = async () => {
@@ -49,7 +50,7 @@ function Profile() {
       .put(`http://localhost:8080/user/${userid}`, data)
       .then((res) => {
         if (res.status === 200) {
-          window.location.reload(false);
+            setRefresh(true);
         }
       })
       .catch((err) => console.log(err));
@@ -64,14 +65,17 @@ function Profile() {
 
   const cancelUpdate = async (event) => {
     if (window.confirm("Changes will not be saved") === true) {
-      window.location.reload(false);
+       setRefresh(true);
     }
     event.preventDefault();
   };
 
   useEffect(() => {
+    console.log("useeffect")
     getUser();
-  }, []);
+    setRefresh(false);
+    setUpdate(false);
+  }, [refresh]);
 
     return (
         <div>
@@ -130,15 +134,6 @@ function Profile() {
                                 <button className="btn btn-danger float-end" onClick={deleteProfile}>Delete Profile</button> }
                 </div>
             </div>
-          {/* <p><span style={{ color: 'red' }}>{login.error}</span></p> */}
-          {update && (
-            <button
-              className="btn btn-primary float-end"
-              onClick={updateProfile}
-            >
-              Save
-            </button>
-          )}
         </div>
   );
 }

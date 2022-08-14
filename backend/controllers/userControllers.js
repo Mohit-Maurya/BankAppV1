@@ -26,6 +26,7 @@ export const getUser = (req, res) => {
 // POST
 export const verifyUser = async(req, res) => {
     User.findOne({userId : req.params.userId}, (err, result) => {
+        console.log(result)
         if (err){
             //server error
             res.status(500);
