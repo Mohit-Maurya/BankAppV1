@@ -101,7 +101,7 @@ export const addNewUser = async (req, res) => {
     const hashedPassword = await bcrypt.hash(newUser.password,salt)
     newUser.password = hashedPassword
     newUser.userId = newUser.mobileNumber;
-    newUser.status = "Pending";
+    newUser.status = "Appoved";
 
     newUser.save((err, result) => {
         if (err){
