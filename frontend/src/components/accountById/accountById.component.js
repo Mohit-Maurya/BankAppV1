@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation,useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 function AccountById() {
     const { state } = useLocation()
-    const { accountNumber } = state
+    const { accountNumber,userid } = state
+    let navigate = useNavigate();
+
     const [err, setErr] = useState('')
     const [msg, setMsg] = useState('')
     const [show, setShow] = useState(false)
@@ -87,13 +89,27 @@ function AccountById() {
             })
     }
 
+
+    const deleteAccount = async(event) =>{
+
+        if (window.confirm("Are your sure you want to close the account?") === true) 
+        {
+            axios.delete("http://localhost:8080/account/" + accountNumber)
+            .then((res)=>{
+                setMsg(accountNumber+" deleted successfully")
+                setShow(true)
+                setTimeout(() => { setShow(false);setMsg(""); navigate('/accounts',{state:{userid:userid}})}, 1500)
+            })
+        }
+    }
+
     return (
         <div>
             {show &&
                 (
                     msg !=="" ?
                      <div className="toast-body" style={{ backgroundColor: 'green' }}>
-                        <h5 style={{ color: 'white' }}>{msg} completed successfully ....</h5>
+                        <h5 style={{ color: 'white' }}>{msg} successfully ....</h5>
                      </div> :
                      <div className="toast-body" style={{ backgroundColor: 'red' }}>
                       <h5 style={{ color: 'white' }}>{err}</h5>
@@ -161,7 +177,7 @@ function AccountById() {
                             </div>
                         </div>
                         <div className='col-12 mb-3'>
-                            <button type='submit' className='btn btn-danger float-end'>Close Account</button>
+                            <button type='submit' className='btn btn-danger float-end' onClick={deleteAccount}>Close Account</button>
                         </div>
                     </div>
                 </div>
