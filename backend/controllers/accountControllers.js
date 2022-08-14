@@ -1,10 +1,11 @@
-import { Logger } from "mongodb";
 import mongoose from "mongoose";
 import { findOne } from "mongoose/lib/model";
 import { AccountSchema, TransactionSchema } from "../models/accountModel";
+import { UserSchema } from "../models/userModel";
 
 const Account = mongoose.model("Account", AccountSchema);
 const Transaction = mongoose.model("Transaction", TransactionSchema);
+const User = mongoose.model("User", UserSchema);
 
 
 // "/accounts"
@@ -31,6 +32,13 @@ export const addNewAccount = (req, res) => {
 
     console.log("new account number generated: ", newAccount.accountNumber);
 
+    User.findOneAndUpdate(
+        {userId: newAccount.userId},
+        {$push: {accounts: newAccount.accountNumber}},
+        (err, result) => {
+            if (err) throw err;
+        }
+    );
     newAccount.save((err, result) => {
         if (err) throw err;
         console.log("New account added: ", newAccount);
