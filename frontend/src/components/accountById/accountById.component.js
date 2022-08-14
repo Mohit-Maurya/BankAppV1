@@ -8,6 +8,7 @@ function AccountById() {
     const [err, setErr] = useState('')
     const [msg, setMsg] = useState('')
     const [show, setShow] = useState(false)
+    const [sentErr,setSentErr] = useState({account:"",amount:""})
     const [account, setAccount] = useState({ accountNumber: '', balance: '', accountType: '' })
     const [branch, setBranch] = useState({ branchName: '', city: '', state: '', ifsc: '' })
     const [sentAcc, setSentAcc] = useState()
@@ -29,14 +30,42 @@ function AccountById() {
                 console.log(res)
             })
             .catch((err) => console.log(err))
-    }, [])
+    }, [account.balance])
 
     const onChangeDepoAmount = async (e) => {
         setTransaction({ action: 'Deposit', depositSource: 'Paytm', toAccountNo: '', fromAccountNo: '', amount: parseFloat(e.target.value), balance: account.balance + parseFloat(e.target.value) })
     }
 
     const onChangeSendAmount = async (e) => {
-        setTransaction({ action: 'sent', depositSource: '', toAccountNo: sentAcc, fromAccountNo: '', amount: parseFloat(e.target.value), balance: account.balance - parseFloat(e.target.value) })
+        if(e.target.value > account.balance)
+            setSentErr((prevState)=>({...prevState,amount:"Amount must be less than balance"}))
+        else    
+        {
+            setSentErr((prevState)=>({...prevState,amount:""}))
+            setTransaction({ action: 'sent', depositSource: '', toAccountNo: sentAcc, fromAccountNo: '', amount: parseFloat(e.target.value), balance: account.balance - parseFloat(e.target.value) })
+        }
+    }
+
+    const onChangeAccountNumber = async (e) => {
+        console.log(e,sentAcc)
+        if(sentAcc === accountNumber)
+            setSentErr((prevState)=>({...prevState,account:"Cannot transfer to the same account"}))
+        else if(!sentAcc)
+            setSentErr((prevState)=>({...prevState,account:"Account number is a required field"}))
+        else{
+                axios.get("http://localhost:8080/account/" + sentAcc)
+                .then((res) => {  
+                    // console.log("inside verify account axios",res)
+                    if(res.data === "Invalid account number")
+                    setSentErr((prevState)=>({...prevState,account:"Invalid account number"}))
+                    else{
+                        setSentAcc(e.target.value)
+                        setSentErr((prevState)=>({...prevState,account:""}))
+                    }  
+                })
+                .catch((err)=>console.log(err))         
+        }
+
     }
 
     const sendAmount = async (event) => {
@@ -48,23 +77,30 @@ function AccountById() {
                 setMsg(res.data)
                 setAccount((prevState)=>({...prevState,balance:transaction.balance}))
                 setShow(true)
-                setTimeout(() => { setShow(false) }, 1500)
+                setTimeout(() => { setShow(false);setMsg("");window.location.reload(false);}, 1500)
             })
             .catch((err) => {
                 console.log(err)
                 setErr(err)
                 setShow(true)
-                setTimeout(() => { setShow(false) }, 1500)
+                setTimeout(() => { setShow(false);setErr("") }, 1500)
             })
     }
 
     return (
         <div>
             {show &&
+                (
+                    msg !=="" ?
+                     <div className="toast-body" style={{ backgroundColor: 'green' }}>
+                        <h5 style={{ color: 'white' }}>{msg} completed successfully ....</h5>
+                     </div> :
+                     <div className="toast-body" style={{ backgroundColor: 'red' }}>
+                      <h5 style={{ color: 'white' }}>{err}</h5>
+                     </div>
 
-                <div className="toast-body" style={{ backgroundColor: 'green' }}>
-                    <h5 style={{ color: 'white' }}>{msg} completed successfully ....</h5>
-                </div>
+                )
+               
             }
             <div className="card mx-auto mt-5" style={{ width: '90vw' }} >
                 <div className="card-body">
@@ -108,11 +144,13 @@ function AccountById() {
                                         <div className='row mb-3'>
                                             <div className="col-6">
                                                 <label className="form-label"><b>To</b></label>
-                                                <input type="text" className="form-control" id="toAccountNumber" placeholder='Account number' onChange={(e) => setSentAcc(e.target.value)} />
+                                                <input type="text" className="form-control" id="toAccountNumber" placeholder='Account number' onBlur={onChangeAccountNumber} onChange={(e)=>setSentAcc(e.target.value)} />
+                                                <p><span style={{ color: 'red' }}>{sentErr.account}</span></p>
                                             </div>
                                             <div className="col-6">
                                                 <label className="form-label"><b>Amount</b></label>
                                                 <input type="text" className="form-control" id="sendAmount" onChange={onChangeSendAmount} />
+                                                <p><span style={{ color: 'red' }}>{sentErr.amount}</span></p>
                                             </div>
                                         </div>
                                         <div className="col-12" >
