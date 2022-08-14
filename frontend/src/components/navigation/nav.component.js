@@ -1,26 +1,28 @@
 import React from "react";
 import { useSelector ,useDispatch} from "react-redux";
-import {Link,useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import {log_out} from "../../features/user"
 
 
 function Navigation() {
+  const headerStyles = {
+    backgroundColor: "#2d3c64",
+    textColor: "#fff",
+  };
+
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const user = useSelector((state)=>state.user.value)
   console.log(user)
+
+
+
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
+    <nav className="navbar navbar-expand-lg navbar-dark" style={headerStyles}>  
       <div className="container-fluid">
-        <span className="navbar-brand">
-          <img
-            src="https://placeholder.pics/svg/150x50/888888/EEE/Logo"
-            alt="..."
-            height="36"
-          />
-        </span>
 
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
+          <h1 className="navbar-nav">404 Bank</h1>
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
             {
                !user.loggedin &&

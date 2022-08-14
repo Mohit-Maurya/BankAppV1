@@ -58,7 +58,7 @@ function Registration() {
                     <label>Temporary Address </label>
                     <input type="text" className="form-control" id="temporaryAddress" onChange={(e) => setData((prevState) => ({ ...prevState, temporaryAddress: e.target.value }))} />
                 </div>
-                <div className="col-4 form-group mb-3">
+                <div className="col-6 form-group mb-3">
                     <label>Password </label>
                     <input type="password" className="form-control" id="password" onChange={(e) => setData((prevState) => ({ ...prevState, password: e.target.value }))} />
                 </div><br />

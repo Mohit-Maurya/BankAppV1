@@ -4,9 +4,15 @@ import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 import {useDispatch,useSelector} from "react-redux";
 import {log_in} from '../../features/user'
+import Footer from "../navigation/footer.component";
 // import Navigation from "../navigation/nav.component";
 
 function Login() {
+  const styleInput = {
+    backgroundColor: "rgb(237, 241, 242)",
+    width: "100%",
+  };
+
   const [login, setLogin] = useState({ userid: "", password: "", error: "" });
   const user = useSelector((state)=>state.user.value)
   const dispatch = useDispatch()
@@ -47,7 +53,7 @@ function Login() {
             type="text"
             id="userid"
             className="form-control rounded-0"
-            style={{ width: "75%" }}
+            style={styleInput}
             onChange={(e) =>
               setLogin((prevState) => ({
                 ...prevState,
@@ -61,7 +67,7 @@ function Login() {
             type="password"
             id="userpassword"
             className="form-control rounded-0"
-            style={{ width: "75%" }}
+            style={styleInput}
             onChange={(e) =>
               setLogin((prevState) => {
                 return { ...prevState, password: e.target.value };
@@ -92,7 +98,7 @@ function Login() {
             type="email"
             id="email"
             className="form-control rounded-0"
-            style={{ width: "75%" }}
+            style={styleInput}
           />
           <br />
           <label>Password</label>
@@ -100,12 +106,13 @@ function Login() {
             type="password"
             id="adminpassword"
             className="form-control rounded-0"
-            style={{ width: "75%" }}
+            style={styleInput}
           />
           <br />
           <button className="btn btn-primary float-end">Login</button>
         </div>
       </div>
+      <Footer />
     </div>
   );
 }
