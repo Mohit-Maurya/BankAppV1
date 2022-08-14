@@ -117,3 +117,17 @@ input:focus {
     width: 80%;
   }
 }
+.parent {
+   width: 600px;
+   margin: 0px auto;
+   padding: 5px;
+}
+.leftChild {
+  width: 48%;
+  float: left;
+}
+.rightChild
+   {
+   width: 48%;
+   float: right;
+   }
