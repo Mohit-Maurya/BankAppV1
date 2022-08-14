@@ -7,10 +7,6 @@ import {log_in} from '../../features/user'
 // import Navigation from "../navigation/nav.component";
 
 function Login() {
-  const styleInput = {
-    backgroundColor: "rgb(237, 241, 242)",
-    width: "100%",
-  };
   const [login, setLogin] = useState({ userid: "", password: "", error: "" });
   const user = useSelector((state)=>state.user.value)
   const dispatch = useDispatch()
@@ -51,7 +47,7 @@ function Login() {
             type="text"
             id="userid"
             className="form-control rounded-0"
-            style={styleInput}
+            style={{ width: "75%" }}
             onChange={(e) =>
               setLogin((prevState) => ({
                 ...prevState,
@@ -65,7 +61,7 @@ function Login() {
             type="password"
             id="userpassword"
             className="form-control rounded-0"
-            style={styleInput}
+            style={{ width: "75%" }}
             onChange={(e) =>
               setLogin((prevState) => {
                 return { ...prevState, password: e.target.value };
@@ -96,7 +92,7 @@ function Login() {
             type="email"
             id="email"
             className="form-control rounded-0"
-            style={styleInput}
+            style={{ width: "75%" }}
           />
           <br />
           <label>Password</label>
@@ -104,7 +100,7 @@ function Login() {
             type="password"
             id="adminpassword"
             className="form-control rounded-0"
-            style={styleInput}
+            style={{ width: "75%" }}
           />
           <br />
           <button className="btn btn-primary float-end">Login</button>
