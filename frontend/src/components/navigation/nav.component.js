@@ -22,7 +22,7 @@ function Navigation() {
       <div className="container-fluid">
 
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
-          <h1 className="navbar-nav">404 Bank</h1>
+          <h1 className="navbar-nav" style={{color: "#fff"}}>404 Bank</h1>
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
             {
                !user.loggedin &&

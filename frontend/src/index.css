@@ -10,7 +10,7 @@
 body {
   font-family: "Poppins", sans-serif;
   background-color: rgb(237, 241, 242);
-  color: #ecedf0;
+  color: #1d1d1e;
   line-height: 1.6;
 }
 
@@ -65,12 +65,13 @@ input:focus {
   border-radius: 8px;
   color: #fff;
   width: fit-content;
+  margin-right: 20px;
   height: 40px;
   cursor: pointer;
 }
 
 .btn-primary {
-  background-color: #202142;
+  background-color: #2d3c64;
 }
 
 .btn-danger {

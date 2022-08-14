@@ -28,17 +28,19 @@ function Accounts() {
     let accountTypesList = accountTypes.map((type) => <option id={type}>{type}</option>)
     let accountsList = accounts.map((a,i) => {
         return (
+        
             <div className="card card-account m-3"  key={i} onClick={()=>{ navigate('/accounts/account',{state:{accountNumber:a.accountNumber,userid:userid}}) }}>
                 <div className="card-body"  key={i}>
                     <div className="row"> 
                         <div className="col-7">
-                            <h5>{a.accountNumber}</h5>
-                            <p><b>Balance </b>  {a.balance}</p>
+                            <p><span><b>Branch(Name, City, State): </b></span> {a.branch.branchName}, {a.branch.state}, {a.branch.city}</p> 
+                            <p><span><b>Account number: </b></span>{a.accountNumber} <br/> </p>
                         </div>
                         <div className="col-3">
-                            <p> {a.branch.branchName}</p><br/> 
-                            <p>   {a.branch.state} {a.branch.city}</p> 
+                            <br/>
+                            <p style={{color: "#2d3c64"}}><span><b>Balance:</b> </span> {a.balance}</p>
                         </div>
+                        
                     </div>
                 </div>
             </div>
@@ -123,14 +125,18 @@ function Accounts() {
     return (
         <div className="p-5">
             <div className="mx-auto mb-5" style={{ width: '75vw' }}>
-                Accounts
-                <button type="button" onClick={onClickCreateAccount} className="btn btn-primary float-end p-1" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                    Create new Account
-                </button>
-                {accountsList}
+                <h1>Accounts</h1>
+                <div className="row">
+                    <div className="center-block">
+                        <button type="button" onClick={onClickCreateAccount} className="btn btn-primary float-end p-1" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                            Create new Account
+                        </button>
+                    </div>
+                    <div className="center-block" >{accountsList}</div>
+                </div>
             </div>
 
-            <div className="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div className="modal-dialog modal-dialog-centered">
                     <div className="modal-content">
                         <div className="modal-header">
@@ -181,7 +187,7 @@ function Accounts() {
                 </div>
             </div>
 
-        </div>
+        </div> 
     )
 }
 
